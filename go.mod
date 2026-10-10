@@ -424,4 +424,4 @@ replace (
 // tencentcloud uses monorepo with multimodule but the go.mod files are incomplete.
 exclude github.com/tencentcloud/tencentcloud-sdk-go v3.0.83+incompatible
 
-replace github.com/quic-go/quic-go => github.com/giorgiobrullo/quic-go v0.0.0-20261010215352-84ba32e94209
+replace github.com/quic-go/quic-go => github.com/giorgiobrullo/quic-go v0.0.0-20261010225941-20b245a4da0b
