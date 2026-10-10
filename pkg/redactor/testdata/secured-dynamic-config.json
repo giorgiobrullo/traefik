@@ -490,7 +490,13 @@
           ],
           "clientAuthType": "RequireAndVerifyClientCert"
         },
-        "sniStrict": true
+        "sniStrict": true,
+        "echKeys": [
+          "xxxx"
+        ],
+        "echDecryptOnlyKeys": [
+          "xxxx"
+        ]
       }
     },
     "stores": {
