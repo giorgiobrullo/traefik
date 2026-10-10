@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+# The fork's image for the cursedkarma saltbox: the official traefik image with this branch's
+# binary (ECH + the quic-go fork) swapped in, so entrypoint and base stay upstream's.
+ARG TRAEFIK_BASE=traefik:v3.7.14
+
+FROM node:24-alpine3.24 AS webui
+WORKDIR /src/webui
+RUN npm i -g corepack
+COPY webui/package.json webui/yarn.lock webui/.yarnrc.yml ./
+RUN yarn install --immutable
+COPY webui/ ./
+ENV VITE_APP_BASE_URL="" VITE_APP_BASE_API_URL="/api"
+RUN yarn build
+
+FROM golang:1.26-alpine AS build
+WORKDIR /src
+COPY . .
+COPY --from=webui /src/webui/static ./webui/static
+ARG VERSION=dev
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 go build -trimpath \
+      -ldflags "-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=${VERSION} -X github.com/traefik/traefik/v3/pkg/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+      -o /traefik ./cmd/traefik
+
+FROM ${TRAEFIK_BASE}
+COPY --from=build /traefik /usr/local/bin/traefik
