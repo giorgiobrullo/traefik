@@ -36,7 +36,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            VERSION=3.7.14-cursedkarma
+            VERSION=3.7.17-cursedkarma
           tags: |
             ghcr.io/${{ github.repository_owner }}/traefik:cursedkarma
             ghcr.io/${{ github.repository_owner }}/traefik:cursedkarma-${{ github.sha }}
