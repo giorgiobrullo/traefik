@@ -1,7 +1,9 @@
 # syntax=docker/dockerfile:1
 # The fork's image for the cursedkarma saltbox: the official traefik image with this branch's
 # binary (ECH + the quic-go fork) swapped in, so entrypoint and base stay upstream's.
-ARG TRAEFIK_BASE=traefik:v3.7.18
+# Only the base layers (alpine, certificates, entrypoint) come from here; v3.7.18 was not on
+# Docker Hub yet when the branch moved to it, so the base stays one patch behind the binary.
+ARG TRAEFIK_BASE=traefik:v3.7.17
 
 FROM node:24-alpine3.24 AS webui
 WORKDIR /src/webui
